@@ -35,7 +35,7 @@ interface IBaseProps extends TranslatorProps {
 interface IProps extends IBaseProps {
 }
 
-const Cover =(props: IProps) => {
+const Cover: React.FC<IProps> =(props) => {
 
     const {
         publicationViewMaybeOpds:
