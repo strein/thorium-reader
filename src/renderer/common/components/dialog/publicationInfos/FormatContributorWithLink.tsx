@@ -6,22 +6,21 @@
 // ==LICENSE-END==
 
 import * as React from "react";
-import { Translator } from "readium-desktop/common/services/translator";
 import { IOpdsContributorView } from "readium-desktop/common/views/opds";
 import * as stylesBookDetailsDialog from "readium-desktop/renderer/assets/styles/bookDetailsDialog.css";
 import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
+import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
 
 interface IProps {
     contributors: string[] | IOpdsContributorView[] | undefined;
-    translator: Translator;
     onClickLinkCb?: (newContributor: IOpdsContributorView) => () => void;
 }
 
 export const FormatContributorWithLink: React.FC<IProps> = (props) => {
 
-    const { contributors, translator, onClickLinkCb } = props;
-
+    const { contributors, onClickLinkCb } = props;
     const retElement: JSX.Element[] = [];
+    const [__, translator] = useTranslator();
 
     if (Array.isArray(contributors)) {
 

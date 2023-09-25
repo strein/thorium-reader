@@ -67,7 +67,6 @@ class PublicationInfo extends React.Component<IProps> {
                     ControlComponent={this.controlsComponent}
                     TagManagerComponent={TagManager}
                     coverZoom={coverZoom}
-                    translator={this.props.translator}
                     onClikLinkCb={
                         (_link) => () =>
                             this.props.link(

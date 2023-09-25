@@ -62,7 +62,6 @@ class PublicationInfo extends React.Component<IProps> {
                     toggleCoverZoomCb={toggleCoverZoom}
                     TagManagerComponent={TagManager}
                     coverZoom={coverZoom}
-                    translator={this.props.translator}
                     focusWhereAmI={focusWhereAmI}
                     pdfPlayerNumberOfPages={pdfPlayerNumberOfPages}
                     divinaNumberOfPages={divinaNumberOfPages}

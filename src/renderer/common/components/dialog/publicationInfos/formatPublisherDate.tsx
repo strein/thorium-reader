@@ -7,18 +7,18 @@
 
 import * as moment from "moment";
 import * as React from "react";
-import { I18nTyped } from "readium-desktop/common/services/translator";
 import { TPublication } from "readium-desktop/common/type/publication.type";
 import * as stylesBookDetailsDialog from "readium-desktop/renderer/assets/styles/bookDetailsDialog.css";
+import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
 
 export interface IProps {
     publicationViewMaybeOpds: TPublication;
-    __: I18nTyped;
 }
 
 export const FormatPublisherDate: React.FC<IProps> = (props) => {
 
-    const { publicationViewMaybeOpds, __ } = props;
+    const { publicationViewMaybeOpds } = props;
+    const [__] = useTranslator();
 
     let formatedPublishedDateComponent = (<></>);
 
