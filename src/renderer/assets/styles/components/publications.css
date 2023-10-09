@@ -45,6 +45,26 @@
     border-radius: 6px;
     background-color: #f1f1f1;
   }
+  & > .format-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(247, 217, 68, 0.8);
+    height: 50px;
+    width: 30%;
+    display: flex;
+    justify-content: end;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+    font-size: 10px;
+    & p {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      transform-origin: 0 0;
+      transform: rotate(43deg);
+      margin: 0;
+    }
+  }
 }
 
 .no_img_wrapper {

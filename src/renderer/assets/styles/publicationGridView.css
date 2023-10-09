@@ -1,0 +1,10 @@
+.publication-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.publication-grid .publication_wrapper {
+        width: 200px;
+        justify-self: center;
+        margin-bottom: 50px;
+} 

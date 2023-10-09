@@ -78,6 +78,8 @@ import {
     ensureKeyboardListenerIsInstalled, registerKeyboardListener, unregisterKeyboardListener,
 } from "readium-desktop/renderer/common/keyboard";
 import { ipcRenderer } from "electron";
+import PublicationCard from "../publication/PublicationCard";
+import "readium-desktop/renderer/assets/styles/publicationGridView.css"
 
 // import {
 //     formatContributorToString,
@@ -192,6 +194,22 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
             >
                 {
                     this.state.publicationViews ?
+                    (
+                        displayType === DisplayType.Grid ?
+                            <div className="publication-grid">
+                                {this.state.publicationViews.map(pub => (
+                                    <PublicationCard
+                                        key={pub.identifier}
+                                        publicationViewMaybeOpds={pub}
+                                        isAudio={pub.isAudio}
+                                        isDivina={pub.isDivina}
+                                        isDaisy={pub.isDaisy}
+                                        isPDF={pub.isPDF}
+                                        isFXL={pub.isFXL}
+                                    />
+                                ))}
+                            </div>
+                        :
                         <TableView
                             accessibilitySupportEnabled={this.state.accessibilitySupportEnabled}
                             location={this.props.location}
@@ -202,7 +220,7 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
                             displayPublicationInfo={this.props.displayPublicationInfo}
                             openReader={this.props.openReader}
                             focusInputRef={this.focusInputRef}
-                        />
+                        />)
                         // (displayType === DisplayType.Grid ?
                         //     <GridView normalOrOpdsPublicationViews={this.state.publicationViews} /> :
                         //     <ListView normalOrOpdsPublicationViews={this.state.publicationViews} />)

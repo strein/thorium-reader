@@ -31,11 +31,19 @@ import CatalogMenu from "./menu/CatalogMenu";
 import OpdsMenu from "./menu/OpdsMenu";
 
 import { convertMultiLangStringToString, langStringIsRTL } from "readium-desktop/renderer/common/language-string";
+// import headphonesIcon from "readium-desktop/renderer/assets/icons/headphones-icon.svg";
+// import pdfIcon from "readium-desktop/renderer/assets/icons/pdf-icon.svg";
+// import openBookIcon from "readium-desktop/renderer/assets/icons/open_book.svg";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IBaseProps extends TranslatorProps {
     publicationViewMaybeOpds: PublicationView | IOpdsPublicationView;
     isOpds?: boolean;
+    isAudio?: boolean;
+    isDivina?: boolean;
+    isDaisy?: boolean;
+    isPDF?: boolean;
+    isFXL?: boolean;
 }
 // IProps may typically extend:
 // RouteComponentProps
@@ -63,6 +71,37 @@ class PublicationCard extends React.Component<IProps> {
         const pubTitleIsRTL = langStringIsRTL(pubTitleLang);
         const pubTitleStr = pubTitleLangStr && pubTitleLangStr[1] ? pubTitleLangStr[1] : "";
 
+        // let format;
+
+        // switch(format) {
+        //     case this.props.isAudio === true:
+        //         format = "Audio";
+        //         break;
+        //     case this.props.isOpds === true:
+        //         format = "OPDS";
+        //         break;
+        //     case this.props.isDivina === true:
+        //         format = "DIVINA";
+        //         break;
+        //     case this.props.isDaisy === true:
+        //         format = "DAISY";
+        //         break;
+        //     case this.props.isPDF === true :
+        //         format = "PDF";
+        //         break;
+        //     case this.props.isFXL === true :
+        //         format = "EPUB";
+        //         break;
+        //     default: 
+        //     format = "default";            
+        // }
+
+        // const format = this.props.isAudio ?  "Audio" :
+        //     this.props.isDivina ? "Divina" : 
+        //     this.props.isPDF ?  "PDF" : 
+        //     this.props.isDaisy ? "DAISY":
+        //     this.props.isFXL ? "EPUB FXL" : <SVG ariaHidden={true} svg={openBookIcon} />;
+
         // aria-haspopup="dialog"
         // aria-controls="dialog"
         return (
@@ -78,6 +117,7 @@ class PublicationCard extends React.Component<IProps> {
                     tabIndex={0}
                 >
                     <Cover publicationViewMaybeOpds={publicationViewMaybeOpds} />
+                    <div className="format-indicator"></div>
                 </a>
                 <div className={stylesPublications.publication_infos_wrapper}>
                     <a aria-hidden onClick={(e) => this.handleBookClick(e)}
