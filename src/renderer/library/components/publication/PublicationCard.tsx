@@ -31,9 +31,10 @@ import CatalogMenu from "./menu/CatalogMenu";
 import OpdsMenu from "./menu/OpdsMenu";
 
 import { convertMultiLangStringToString, langStringIsRTL } from "readium-desktop/renderer/common/language-string";
-// import headphonesIcon from "readium-desktop/renderer/assets/icons/headphones-icon.svg";
-// import pdfIcon from "readium-desktop/renderer/assets/icons/pdf-icon.svg";
-// import openBookIcon from "readium-desktop/renderer/assets/icons/open_book.svg";
+import * as headphonesIcon from "readium-desktop/renderer/assets/icons/headphones-icon.svg";
+import * as pdfIcon from "readium-desktop/renderer/assets/icons/pdf-icon.svg";
+import * as openBookIcon from "readium-desktop/renderer/assets/icons/open_book.svg";
+// import * as epubIcon from "readium-desktop/renderer/assets/icons/epub-logo-icon.svg";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IBaseProps extends TranslatorProps {
@@ -96,11 +97,11 @@ class PublicationCard extends React.Component<IProps> {
         //     format = "default";            
         // }
 
-        // const format = this.props.isAudio ?  "Audio" :
-        //     this.props.isDivina ? "Divina" : 
-        //     this.props.isPDF ?  "PDF" : 
-        //     this.props.isDaisy ? "DAISY":
-        //     this.props.isFXL ? "EPUB FXL" : <SVG ariaHidden={true} svg={openBookIcon} />;
+        const format = this.props.isAudio ?  <SVG ariaHidden={true} svg={headphonesIcon} /> :
+            this.props.isDivina ? "Divina" : 
+            this.props.isPDF ?  <SVG ariaHidden={true} svg={pdfIcon} /> : 
+            this.props.isDaisy ? "DAISY":
+            this.props.isFXL ? "EPUB FXL" : <SVG ariaHidden={true} svg={openBookIcon} />;
 
         // aria-haspopup="dialog"
         // aria-controls="dialog"
@@ -117,7 +118,7 @@ class PublicationCard extends React.Component<IProps> {
                     tabIndex={0}
                 >
                     <Cover publicationViewMaybeOpds={publicationViewMaybeOpds} />
-                    <div className="format-indicator"></div>
+                    <div className="format-indicator">{format}</div>
                 </a>
                 <div className={stylesPublications.publication_infos_wrapper}>
                     <a aria-hidden onClick={(e) => this.handleBookClick(e)}

@@ -50,6 +50,7 @@
     top: 2px;
     right: 2px;
     background: rgba(247, 217, 68, 0.8);
+    /* background: linear-gradient(rgba(59, 169, 253, 0.842), rgba(41, 162, 255, 0.842)); */
     height: 50px;
     width: 30%;
     display: flex;
@@ -63,6 +64,15 @@
       transform-origin: 0 0;
       transform: rotate(43deg);
       margin: 0;
+    }
+    & svg {
+      position: absolute;
+      /* bottom: 15px;
+      left: 20px; */
+      bottom: 35%;
+      left: 40%;
+      scale: 0.6;
+      fill: white;
     }
   }
 }

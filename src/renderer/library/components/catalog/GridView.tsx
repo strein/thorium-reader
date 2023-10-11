@@ -112,6 +112,11 @@ class CatalogGridView extends React.Component<IProps, IState> {
                                                     <PublicationCard
                                                         key={pub.identifier}
                                                         publicationViewMaybeOpds={pub}
+                                                        isAudio={pub.isAudio}
+                                                        isDivina={pub.isDivina}
+                                                        isDaisy={pub.isDaisy}
+                                                        isPDF={pub.isPDF}
+                                                        isFXL={pub.isFXL}
                                                     />,
                                                 )}
                                             />
