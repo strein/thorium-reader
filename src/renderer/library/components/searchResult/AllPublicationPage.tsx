@@ -80,6 +80,9 @@ import {
 import { ipcRenderer } from "electron";
 import PublicationCard from "../publication/PublicationCard";
 import "readium-desktop/renderer/assets/styles/publicationGridView.css"
+import * as sortIcon from "readium-desktop/renderer/assets/icons/sort-icon.svg";
+import * as resetIcon from "readium-desktop/renderer/assets/icons/reset-icon.svg";
+import * as Popover from '@radix-ui/react-popover';
 
 // import {
 //     formatContributorToString,
@@ -183,8 +186,71 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
         const { __ } = this.props;
         const title = __("catalog.allBooks");
 
+
+        const publicationsArray = this.state.publicationViews;
+
+        
+        // const compare = (value: any) => (a: any, b: any) => {
+        //     if ( a[value] < b ){
+        //         return -1;
+        //       }
+        //       if ( a.last_nom > b.last_nom ){
+        //         return 1;
+        //       }
+        //       return 0;
+        // }
+
+        const sortBy = (v: "publicationTitle" | "authors" | "modifiedAt") => () => {
+            // e.preventDefault();
+            this.setState({publicationViews: publicationsArray.sort(({[v]: a},{[v]: b}) => {
+                console.log(a,b);
+
+                if (Array.isArray(a)) {
+                    a = a[0];
+                } else if (typeof a === "object") {
+                    [,a] = convertMultiLangStringToString(this.props.translator, a);
+                }
+                
+                if (b === a) return 0;
+                if (b < a) return 1;
+                return -1;
+            }
+            )
+        })
+        }
+
+        const filters =    
+            <div className="filters" style={{position: "absolute", right: displayType === DisplayType.Grid ? "40px" : "220px" }}>                           
+                <Popover.Root>
+                    <Popover.Trigger asChild>
+                    <button>
+                        <SVG ariaHidden={true} svg={sortIcon} />
+                    </button>
+                    </Popover.Trigger>
+                    <Popover.Portal>
+                    <Popover.Content className="filters-content" sideOffset={5}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                            <div className="filters-title">
+                                <button
+                                onClick={() => location.reload()}
+                                >
+                                    <SVG ariaHidden={true} svg={resetIcon} />
+                                </button>
+                                <p className="Text" style={{ marginBottom: 10 }}>Sort By</p>
+                            </div>
+                            <button onClick={sortBy("publicationTitle")}>Title</button>
+                            <button onClick={sortBy("authors")}>Author</button>
+                        </div>
+                        <Popover.Arrow className="PopoverArrow" />
+                    </Popover.Content>
+                    </Popover.Portal>
+                </Popover.Root>
+            </div>;
+
+
         const secondaryHeader = <Header />;
-        const breadCrumb = <BreadCrumb breadcrumb={[{ name: __("catalog.myBooks"), path: "/library" }, { name: title }]}/>;
+        const breadCrumb = <BreadCrumb breadcrumb={[{ name: __("catalog.myBooks"), path: "/library" }, { name: title }]} filters={filters}/>;
+
 
         return (
             <LibraryLayout
@@ -193,21 +259,23 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
                 breadCrumb={breadCrumb}
             >
                 {
-                    this.state.publicationViews ?
+                    publicationsArray ?
                     (
                         displayType === DisplayType.Grid ?
-                            <div className="publication-grid">
-                                {this.state.publicationViews.map(pub => (
-                                    <PublicationCard
-                                        key={pub.identifier}
-                                        publicationViewMaybeOpds={pub}
-                                        isAudio={pub.isAudio}
-                                        isDivina={pub.isDivina}
-                                        isDaisy={pub.isDaisy}
-                                        isPDF={pub.isPDF}
-                                        isFXL={pub.isFXL}
-                                    />
-                                ))}
+                        <div className="grid-container">
+                                <div className="publication-grid">
+                                    {publicationsArray.map(pub => (
+                                        <PublicationCard
+                                            key={pub.identifier}
+                                            publicationViewMaybeOpds={pub}
+                                            isAudio={pub.isAudio}
+                                            isDivina={pub.isDivina}
+                                            isDaisy={pub.isDaisy}
+                                            isPDF={pub.isPDF}
+                                            isFXL={pub.isFXL}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         :
                         <TableView
@@ -2312,3 +2380,4 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslator(AllPublicationPage));
+

@@ -24,6 +24,7 @@ import { DisplayType, IRouterLocationState } from "../../routing";
 interface IBaseProps extends TranslatorProps {
     breadcrumb: IBreadCrumbItem[];
     className?: string;
+    filters?: React.ReactElement;
 }
 // IProps may typically extend:
 // RouteComponentProps
@@ -43,45 +44,46 @@ class BreadCrumb extends React.Component<IProps, undefined> {
         const { breadcrumb, __ } = this.props;
 
         return (
-            <div className={classNames(stylesBreadcrumb.breadcrumb, this.props.className)}>
-                {
-                    breadcrumb.length >= 2
-                    && <Link
-                        to={{
-                            ...this.props.location,
-                            pathname: breadcrumb[breadcrumb.length - 2].path,
-                        }}
-                        state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
-                        title={__("opds.back")}
-                        className={stylesButtons.button_transparency_icon}
-                    >
-                        <SVG ariaHidden={true} svg={ArrowIcon} />
-                    </Link>
-                }
-                {
-                    breadcrumb
-                    && breadcrumb.map(
-                        (item, index) =>
-                            item.path && index !== breadcrumb.length - 1 ?
-                                <Link
-                                    key={index}
-                                    to={{
-                                        ...this.props.location,
-                                        pathname: item.path,
-                                    }}
-                                    state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
-                                    title={item.name}
-                                    className={stylesButtons.button_transparency}
-                                >
-                                    {item.name}
-                                </Link>
-                            :
-                                <strong key={index}>
-                                    {item.name}
-                                </strong>,
-                    )
-                }
-            </div>
+                <div className={classNames(stylesBreadcrumb.breadcrumb, this.props.className)}>
+                    {
+                        breadcrumb.length >= 2
+                        && <Link
+                            to={{
+                                ...this.props.location,
+                                pathname: breadcrumb[breadcrumb.length - 2].path,
+                            }}
+                            state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
+                            title={__("opds.back")}
+                            className={stylesButtons.button_transparency_icon}
+                        >
+                            <SVG ariaHidden={true} svg={ArrowIcon} />
+                        </Link>
+                    }
+                    {
+                        breadcrumb
+                        && breadcrumb.map(
+                            (item, index) =>
+                                item.path && index !== breadcrumb.length - 1 ?
+                                    <Link
+                                        key={index}
+                                        to={{
+                                            ...this.props.location,
+                                            pathname: item.path,
+                                        }}
+                                        state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
+                                        title={item.name}
+                                        className={stylesButtons.button_transparency}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                :
+                                    <strong key={index}>
+                                        {item.name}
+                                    </strong>,
+                        )
+                    }
+                    {this.props.filters}
+                </div> 
         );
     }
 }
