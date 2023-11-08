@@ -32,6 +32,9 @@ export interface IOpdsApi {
     getUrlWithSearchLinks: (
         searchLink: TOpdsLinkSearch[] | TOpdsLinkSearch,
     ) => SagaGenerator<string | undefined>;
+    authorizeFeed: (
+        url: string,
+    ) => Generator<IOpdsFeedView>;
 }
 
 export interface IOpdsModuleApi {
@@ -41,4 +44,5 @@ export interface IOpdsModuleApi {
     "opds/addFeed": IOpdsApi["addFeed"];
     // "opds/updateFeed": IOpdsApi["updateFeed"];
     "opds/getUrlWithSearchLinks": IOpdsApi["getUrlWithSearchLinks"];
+    "opds/authorizeFeed": IOpdsApi["authorizeFeed"];
 }

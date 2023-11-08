@@ -9,6 +9,17 @@ import { OpdsFeed } from "readium-desktop/common/models/opds";
 import { IOpdsFeedView } from "readium-desktop/common/views/opds";
 import { diMainGet } from "readium-desktop/main/di";
 import { call, SagaGenerator } from "typed-redux-saga";
+import { IDigestDataParsed } from "readium-desktop/utils/digest";
+import { OPDSAuthenticationDoc } from "r2-opds-js/dist/es8-es2017/src/opds/opds2/opds2-authentication-doc";
+import { OPDSAuthentication } from "r2-opds-js/dist/es8-es2017/src/opds/opds2/opds2-authentication";
+import { OPDSAuthenticationLabels } from "r2-opds-js/dist/es8-es2017/src/opds/opds2/opds2-authentication-labels";
+import { getOpdsAuthenticationChannel } from "readium-desktop/main/event";
+import { OPDSLink } from "r2-opds-js/dist/es8-es2017/src/opds/opds2/opds2-link";
+import * as debug_ from "debug";
+
+//Logger
+const filename_ = "readium-desktop:main/http";
+const debug = debug_(filename_);
 
 /*
 
@@ -82,4 +93,55 @@ export function* findAllFeeds(): SagaGenerator<IOpdsFeedView[]> {
     const docs = yield* call(() => opdsFeedRepository.findAll());
     return docs.map((doc) =>
         opdsFeedViewConverter.convertDocumentToView(doc));
+}
+
+export function* authorizeFeed(url: string) {
+    sendWwwAuthenticationToAuthenticationProcess({
+        type: "basic",
+        username: "",
+        realm: "",
+        nonce: "",
+        algorithm: "MD5",
+        qop: "auth",
+        cnonce: "",
+        uri: "",
+        nonceCount: "",
+    }, url);
+};
+
+function sendWwwAuthenticationToAuthenticationProcess(
+    data: IDigestDataParsed & {type: "digest" | "basic"},
+    responseUrl: string,
+) {
+
+    const opdsAuthDoc = new OPDSAuthenticationDoc();
+
+    opdsAuthDoc.Id = "";
+    opdsAuthDoc.Title = ""; // realm || "basic authenticate"; NOT HUMAN-READABLE!
+
+    const opdsAuth = new OPDSAuthentication();
+
+    opdsAuth.Type = "http://opds-spec.org/auth/" + data.type;
+    opdsAuth.AdditionalJSON = {...data};
+    opdsAuth.Labels = new OPDSAuthenticationLabels();
+    opdsAuth.Labels.Login = "LOGIN";
+    opdsAuth.Labels.Password = "PASSWORD";
+
+    const opdsLink = new OPDSLink();
+    opdsLink.Rel = ["authenticate"];
+    opdsLink.Href = responseUrl;
+
+    opdsAuth.Links = [opdsLink];
+
+    opdsAuthDoc.Authentication = [opdsAuth];
+
+    dispatchAuthenticationProcess(opdsAuthDoc, responseUrl);
+}
+
+function dispatchAuthenticationProcess(r2OpdsAuth: OPDSAuthenticationDoc, responseUrl: string) {
+
+    const opdsAuthChannel = getOpdsAuthenticationChannel();
+
+    debug("put the authentication model in the saga authChannel", JSON.stringify(opdsAuthChannel, null, 4));
+    opdsAuthChannel.put([r2OpdsAuth, responseUrl]);
 }

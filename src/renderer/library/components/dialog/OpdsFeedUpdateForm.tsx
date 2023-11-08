@@ -96,10 +96,24 @@ class OpdsFeedUpdateForm extends React.Component<IProps, IState> {
                             defaultValue={this.props.feed.url}
                         />
                     </div>
+                    <div>
+                        <button className="button_primary" onClick={() => this.authorize()}
+                            type="button"
+                        >Authorize!</button>
+                    </div>
+
                 </div>
             </Dialog>
         );
     }
+
+    private authorize = () => {
+        const url: string = this.props.feed.url;
+
+        apiAction("opds/authorizeFeed", url).catch((err) => {
+            console.error("Error to fetch api opds/authorizeFeed", err);
+        });
+    };
 
     private update = () => {
         const title = this.state.name;

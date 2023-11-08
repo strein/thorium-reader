@@ -7,7 +7,7 @@
 
 import { IOpdsApi } from "readium-desktop/common/api/interface/opdsApi.interface";
 
-import { getFeed, addFeed, findAllFeeds, deleteFeed } from "./feed";
+import { getFeed, addFeed, findAllFeeds, deleteFeed, authorizeFeed } from "./feed";
 import { getUrlWithSearchLinks } from "./getUrlWithSearchLinks";
 
 export const opdsApi: IOpdsApi = {
@@ -16,4 +16,5 @@ export const opdsApi: IOpdsApi = {
     findAllFeeds,
     deleteFeed,
     getUrlWithSearchLinks,
+    authorizeFeed,
 };
